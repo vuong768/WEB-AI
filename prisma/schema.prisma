@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  email       String     @unique
+  password    String
+  firstName   String?
+  lastName    String?
+  phone       String?
+  address     String?    // Địa chỉ của người dùng
+  avatar      String?    // URL ảnh đại diện
+  role        String     @default("customer") // customer, admin
+  cart        Cart?
+  orders      Order[]
+  blogs       Blog[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+
+model Product {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  price       Float
+  stock       Int
+  imageUrl    String?    // URL ảnh sản phẩm
+  category    Category?  @relation(fields: [categoryId], references: [id])
+  categoryId  String?    @db.ObjectId
+  cartItems   CartItem[] // Quan hệ ngược với CartItem
+  orderItems  OrderProduct[] // Quan hệ ngược với OrderProduct
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Category {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String     @unique
+  products    Product[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Cart {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String     @unique @db.ObjectId
+  user        User       @relation(fields: [userId], references: [id])
+  cartItems   CartItem[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model CartItem {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  cartId      String     @db.ObjectId
+  cart        Cart       @relation(fields: [cartId], references: [id])
+  productId   String     @db.ObjectId
+  product     Product    @relation(fields: [productId], references: [id])
+  quantity    Int        @default(1)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Order {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String     @db.ObjectId
+  user        User       @relation(fields: [userId], references: [id])
+  orderItems  OrderProduct[]
+  total       Float
+  status      String    
+  shippingAddress String?
+  phone       String?
+  name        String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model OrderProduct {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  orderId     String     @db.ObjectId
+  order       Order      @relation(fields: [orderId], references: [id])
+  productId   String     @db.ObjectId
+  product     Product    @relation(fields: [productId], references: [id])
+  quantity    Int
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Blog {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  content     String
+  imageUrl    String?    // Ảnh đại diện bài viết
+  authorId    String     @db.ObjectId
+  author      User       @relation(fields: [authorId], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}

@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "module": "commonjs", // Sử dụng module CommonJS
+    "declaration": true, // Tạo file .d.ts để hỗ trợ typing
+    "removeComments": true, // Loại bỏ comment trong file build
+    "emitDecoratorMetadata": true, // Hỗ trợ decorator metadata
+    "experimentalDecorators": true, // Hỗ trợ decorator
+    "allowSyntheticDefaultImports": true, // Hỗ trợ import mặc định
+    "target": "ES2021", // Biên dịch mã JavaScript với ES2021
+    "sourceMap": true, // Tạo file .map cho việc debug
+    "outDir": "./dist", // Đầu ra file build
+    "baseUrl": "./", // Đường dẫn cơ sở
+    "incremental": true, // Bật chế độ build incremental
+    "skipLibCheck": true, // Bỏ qua kiểm tra thư viện (tăng tốc biên dịch)
+    "strictNullChecks": true, // Kích hoạt kiểm tra giá trị null/undefined
+    "noImplicitAny": true, // Không cho phép kiểu any ngầm định
+    "strictBindCallApply": true, // Kiểm tra chặt chẽ các method call và apply
+    "forceConsistentCasingInFileNames": true, // Đảm bảo tên file không phân biệt hoa thường
+    "noFallthroughCasesInSwitch": true, // Ngăn chặn lỗi không xử lý switch
+    "typeRoots": ["./node_modules/@types"], // Đường dẫn đến khai báo types
+    "types": ["node", "passport"], // Kích hoạt types cho Node.js và Passport
+    "esModuleInterop": true // Hỗ trợ import ES module
+  },
+  "include": ["src/**/*"], // Bao gồm tất cả các file trong src
+  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"] // Loại trừ thư mục và file không cần thiết
+}
